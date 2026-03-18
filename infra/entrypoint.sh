@@ -12,14 +12,6 @@ fi
 # Mappen aanmaken
 mkdir -p "$BASE/assetto" "$BASE/servers"
 
-# shared_store.json — verwijder als het een map is, maak aan als bestand
-if [ -d "$BASE/shared_store.json" ]; then
-  rm -rf "$BASE/shared_store.json"
-fi
-if [ ! -f "$BASE/shared_store.json" ]; then
-  echo "{}" > "$BASE/shared_store.json"
-fi
-
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
 if [ -f "$REPO/server-manager" ]; then
