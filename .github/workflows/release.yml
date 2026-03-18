@@ -26,7 +26,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete latest --yes --cleanup-tag 2>/dev/null || true
-          gh release create latest acsm-stack.zip \
-            --title "Latest stack" \
-            --notes "Automated release from commit ${{ github.sha }}" 
+          # Maak release aan als die nog niet bestaat
+          gh release create latest --title "Latest stack" --notes "ACSM stack + binaries" 2>/dev/null || true
+          # Upload/overschrijf enkel de stack zip, raak binaries niet aan
+          gh release upload latest acsm-stack.zip --clobber --repo ${{ github.repository }}
