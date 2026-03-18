@@ -9,8 +9,13 @@ if ! id assetto >/dev/null 2>&1; then
   useradd -m -s /bin/sh assetto
 fi
 
-# Mappen
-mkdir -p "$BASE/assetto" "$BASE/servers" "$BASE/shared_store.json"
+# Mappen aanmaken
+mkdir -p "$BASE/assetto" "$BASE/servers"
+
+# shared_store.json — moet een bestand zijn, geen map
+if [ ! -f "$BASE/shared_store.json" ]; then
+  echo "{}" > "$BASE/shared_store.json"
+fi
 
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
@@ -23,16 +28,8 @@ fi
 # Licentie
 [ -f /ACSM.License ] && cp -f /ACSM.License "$BASE/ACSM.License" || true
 
-# Permissies
-chown assetto:assetto \
-  "$BASE/assetto-multiserver-manager" \
-  "$BASE/server-manager" 2>/dev/null || true
-[ -f "$BASE/ACSM.License" ] && \
-  chown assetto:assetto "$BASE/ACSM.License" 2>/dev/null || true
-chown -R assetto:assetto \
-  "$BASE/assetto" \
-  "$BASE/servers" \
-  "$BASE/shared_store.json" 2>/dev/null || true
+# Permissies — alles in één keer
+chown -R assetto:assetto "$BASE"
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
