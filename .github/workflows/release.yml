@@ -1,0 +1,32 @@
+name: Release stack
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build stack zip
+        run: |
+          zip -r acsm-stack.zip \
+            docker-compose.yml \
+            infra/ \
+            my-config/
+
+      - name: Update latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create latest acsm-stack.zip \
+            --title "Latest stack" \
+            --notes "Automated release from commit ${{ github.sha }}" 

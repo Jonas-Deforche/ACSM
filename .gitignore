@@ -1,0 +1,5 @@
+secrets/
+*.zip
+*.log
+*.tmp
+.DS_Store
