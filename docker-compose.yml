@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   assetto-multiserver:
     image: ubuntu:22.04
@@ -16,13 +14,13 @@ services:
       - "traefik.docker.network=proxy"
       - "traefik.http.services.acsm.loadbalancer.server.port=8772"
 
-      - "traefik.http.routers.race.rule=Host(`race.intersimcompetition.com`) || Host(`www.race.intersimcompetition.com`)"
+      - "traefik.http.routers.race.rule=Host(`${ACSM_HOST}`) || Host(`www.${ACSM_HOST}`)"
       - "traefik.http.routers.race.entrypoints=websecure"
       - "traefik.http.routers.race.tls=true"
       - "traefik.http.routers.race.tls.certresolver=leresolver"
       - "traefik.http.routers.race.service=acsm"
 
-      - "traefik.http.routers.race-http.rule=Host(`race.intersimcompetition.com`) || Host(`www.race.intersimcompetition.com`)"
+      - "traefik.http.routers.race-http.rule=Host(`${ACSM_HOST}`) || Host(`www.${ACSM_HOST}`)"
       - "traefik.http.routers.race-http.entrypoints=web"
       - "traefik.http.routers.race-http.middlewares=redirect-to-https@file"
 
@@ -39,7 +37,6 @@ services:
       - ./my-config/servers.yml:/home/assetto/server-manager/servers.yml:ro
       - assetto_data:/home/assetto/server-manager/assetto
       - servers_data:/home/assetto/server-manager/servers
-      - shared_store_data:/home/assetto/server-manager/shared_store.json
 
     ports:
       - "9601-9610:9601-9610"
@@ -54,4 +51,3 @@ networks:
 volumes:
   assetto_data:
   servers_data:
-  shared_store_data:
