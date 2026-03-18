@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   assetto-multiserver:
     image: ubuntu:22.04
