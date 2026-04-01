@@ -12,9 +12,6 @@ fi
 # Mappen aanmaken
 mkdir -p "$BASE/assetto" "$BASE/servers"
 
-# shared_store.json — moet een map zijn
-mkdir -p "$BASE/shared_store.json"
-
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
 if [ -f "$REPO/server-manager" ]; then
@@ -30,10 +27,9 @@ fi
 chown assetto:assetto "$BASE"
 chown assetto:assetto \
   "$BASE/assetto-multiserver-manager" \
-  "$BASE/server-manager" \
-  "$BASE/shared_store.json" 2>/dev/null || true
-[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" 2>/dev/null || true
-chown -R assetto:assetto "$BASE/assetto" "$BASE/servers" 2>/dev/null || true
+  "$BASE/server-manager"
+[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" || true
+chown -R assetto:assetto "$BASE/assetto" "$BASE/servers"
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto

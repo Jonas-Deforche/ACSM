@@ -37,6 +37,7 @@ services:
       - ./my-config/servers.yml:/home/assetto/server-manager/servers.yml:ro
       - assetto_data:/home/assetto/server-manager/assetto
       - servers_data:/home/assetto/server-manager/servers
+      - store_data:/home/assetto/server-manager/shared_store.json
 
     ports:
       - "9601-9610:9601-9610"
@@ -51,3 +52,4 @@ networks:
 volumes:
   assetto_data:
   servers_data:
+  store_data:
