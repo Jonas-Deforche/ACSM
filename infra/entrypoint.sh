@@ -4,11 +4,6 @@ set -e
 BASE="/home/assetto/server-manager"
 REPO="/opt/acsm-repo"
 
-# CA certificates (nodig voor GeoIP, CSP Weather en andere TLS calls vanuit de container)
-apt-get update -qq
-apt-get install -y --no-install-recommends ca-certificates
-rm -rf /var/lib/apt/lists/*
-
 # User aanmaken indien nodig
 if ! id assetto >/dev/null 2>&1; then
   useradd -m -s /bin/sh assetto
@@ -36,9 +31,9 @@ chown assetto:assetto "$BASE"
 chown assetto:assetto \
   "$BASE/assetto-multiserver-manager" \
   "$BASE/server-manager" \
-  "$BASE/shared_store.json"
-[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" || true
-chown -R assetto:assetto "$BASE/assetto" "$BASE/servers"
+  "$BASE/shared_store.json" 2>/dev/null || true
+[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" 2>/dev/null || true
+chown -R assetto:assetto "$BASE/assetto" "$BASE/servers" 2>/dev/null || true
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
