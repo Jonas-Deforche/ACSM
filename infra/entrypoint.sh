@@ -20,11 +20,6 @@ mkdir -p "$BASE/assetto" "$BASE/servers"
 # shared_store.json — moet een map zijn
 mkdir -p "$BASE/shared_store.json"
 
-# Server subdirectories (janitor verwacht deze)
-for i in $(seq 1 10); do
-  mkdir -p "$BASE/servers/SERVER_0${i}/assetto/content/server-manager/images/collision-replays"
-done
-
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
 if [ -f "$REPO/server-manager" ]; then
