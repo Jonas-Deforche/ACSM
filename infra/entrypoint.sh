@@ -30,6 +30,7 @@ chown assetto:assetto \
   "$BASE/server-manager"
 [ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" || true
 chown -R assetto:assetto "$BASE/assetto" "$BASE/servers"
+[ -e "$BASE/shared_store.json" ] && chown -R assetto:assetto "$BASE/shared_store.json" || true
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
