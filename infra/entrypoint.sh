@@ -28,8 +28,16 @@ fi
 # Licentie
 [ -f /ACSM.License ] && cp -f /ACSM.License "$BASE/ACSM.License" || true
 
-# Eén chown -R over alles, dekt alle (mogelijk root-owned) volume mounts
-chown -R assetto:assetto "$BASE"
+# Permissies — selectief, niet recursief over $BASE want config.yml/servers.yml
+# zijn :ro bind mounts (chown faalt met "Read-only file system")
+chown assetto:assetto "$BASE" \
+  "$BASE/assetto-multiserver-manager" \
+  "$BASE/server-manager"
+[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" || true
+chown -R assetto:assetto \
+  "$BASE/assetto" \
+  "$BASE/servers" \
+  "$BASE/shared_store.json"
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
