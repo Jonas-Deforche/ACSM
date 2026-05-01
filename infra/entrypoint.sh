@@ -13,11 +13,13 @@ getent passwd assetto >/dev/null 2>&1 || useradd \
   -u "$ASSETTO_UID" -g "$ASSETTO_GID" \
   --no-create-home --shell /bin/sh --home-dir /nonexistent assetto
 
-# Mappenstructuur — pre-create alle subdirs die ACSM watchers anders missen,
-# BEHALVE accounts/: afwezigheid daarvan triggert bootstrap van default admin.
+# Mappenstructuur — pre-create alle subdirs die ACSM watchers anders missen.
+# accounts/ + accounts/groups/ mogen leeg bestaan: bootstrap kijkt naar
+# afwezigheid van admin.json (niet de dir) om default admin aan te maken.
 mkdir -p \
   "$BASE/assetto" \
   "$BASE/servers" \
+  "$BASE/shared_store.json/accounts/groups" \
   "$BASE/shared_store.json/groups" \
   "$BASE/shared_store.json/custom_races" \
   "$BASE/shared_store.json/championships" \
