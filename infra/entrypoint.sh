@@ -3,19 +3,26 @@ set -e
 
 BASE="/home/assetto/server-manager"
 REPO="/opt/acsm-repo"
+ASSETTO_UID=1000
+ASSETTO_GID=1000
 
-# User aanmaken indien nodig (geen home dir = geen warnings)
-if ! id -u assetto >/dev/null 2>&1; then
-  useradd --no-create-home --shell /bin/sh --home-dir /nonexistent assetto
-fi
+# Group + user aanmaken indien nodig — gebruik vaste UID/GID zodat chown
+# altijd op nummer kan, ongeacht NSS lookup state
+getent group assetto >/dev/null 2>&1 || groupadd -g "$ASSETTO_GID" assetto
+getent passwd assetto >/dev/null 2>&1 || useradd \
+  -u "$ASSETTO_UID" -g "$ASSETTO_GID" \
+  --no-create-home --shell /bin/sh --home-dir /nonexistent assetto
 
-# Mappenstructuur — incl. shared_store subdirs zodat ACSM watchers
-# niet falen op fresh volume met "no such file or directory"
+# Mappenstructuur — alle subdirs die ACSM watchers verwachten op fresh volume
 mkdir -p \
   "$BASE/assetto" \
   "$BASE/servers" \
   "$BASE/shared_store.json/accounts/groups" \
-  "$BASE/shared_store.json/groups"
+  "$BASE/shared_store.json/groups" \
+  "$BASE/shared_store.json/custom_races" \
+  "$BASE/shared_store.json/championships" \
+  "$BASE/shared_store.json/championships_meta" \
+  "$BASE/shared_store.json/race_weekends"
 
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
@@ -28,13 +35,13 @@ fi
 # Licentie
 [ -f /ACSM.License ] && cp -f /ACSM.License "$BASE/ACSM.License" || true
 
-# Permissies — selectief, niet recursief over $BASE want config.yml/servers.yml
-# zijn :ro bind mounts (chown faalt met "Read-only file system")
-chown assetto:assetto "$BASE" \
+# Permissies — selectief (config.yml/servers.yml zijn :ro bind mounts).
+# UID:GID notatie omzeilt elke NSS-lookup race condition.
+chown "$ASSETTO_UID:$ASSETTO_GID" "$BASE" \
   "$BASE/assetto-multiserver-manager" \
   "$BASE/server-manager"
-[ -f "$BASE/ACSM.License" ] && chown assetto:assetto "$BASE/ACSM.License" || true
-chown -R assetto:assetto \
+[ -f "$BASE/ACSM.License" ] && chown "$ASSETTO_UID:$ASSETTO_GID" "$BASE/ACSM.License" || true
+chown -R "$ASSETTO_UID:$ASSETTO_GID" \
   "$BASE/assetto" \
   "$BASE/servers" \
   "$BASE/shared_store.json"
