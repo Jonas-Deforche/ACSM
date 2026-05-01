@@ -13,12 +13,16 @@ getent passwd assetto >/dev/null 2>&1 || useradd \
   -u "$ASSETTO_UID" -g "$ASSETTO_GID" \
   --no-create-home --shell /bin/sh --home-dir /nonexistent assetto
 
-# Mappenstructuur — alleen wat de binary expliciet nodig heeft.
-# shared_store.json subdirs NIET pre-creëren: ACSM gebruikt afwezigheid van
-# accounts/ als signaal voor first-time bootstrap (default admin/admin).
+# Mappenstructuur — pre-create alle subdirs die ACSM watchers anders missen,
+# BEHALVE accounts/: afwezigheid daarvan triggert bootstrap van default admin.
 mkdir -p \
   "$BASE/assetto" \
-  "$BASE/servers"
+  "$BASE/servers" \
+  "$BASE/shared_store.json/groups" \
+  "$BASE/shared_store.json/custom_races" \
+  "$BASE/shared_store.json/championships" \
+  "$BASE/shared_store.json/championships_meta" \
+  "$BASE/shared_store.json/race_weekends"
 
 # Binaries
 install -Dm755 "$REPO/assetto-multiserver-manager" "$BASE/assetto-multiserver-manager"
