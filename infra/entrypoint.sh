@@ -18,6 +18,7 @@ getent passwd assetto >/dev/null 2>&1 || useradd \
 mkdir -p \
   "$BASE/assetto" \
   "$BASE/servers" \
+  "$BASE/content" \
   "$BASE/shared_store.json/groups" \
   "$BASE/shared_store.json/custom_races" \
   "$BASE/shared_store.json/championships" \
@@ -44,7 +45,8 @@ chown "$ASSETTO_UID:$ASSETTO_GID" "$BASE" \
 chown -R "$ASSETTO_UID:$ASSETTO_GID" \
   "$BASE/assetto" \
   "$BASE/servers" \
-  "$BASE/shared_store.json"
+  "$BASE/shared_store.json" \
+  "$BASE/content"
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
