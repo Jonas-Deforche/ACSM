@@ -19,6 +19,8 @@ mkdir -p \
   "$BASE/assetto" \
   "$BASE/servers" \
   "$BASE/content" \
+  "$BASE/setups" \
+  "$BASE/manager" \
   "$BASE/shared_store.json/groups" \
   "$BASE/shared_store.json/custom_races" \
   "$BASE/shared_store.json/championships" \
@@ -46,7 +48,9 @@ chown -R "$ASSETTO_UID:$ASSETTO_GID" \
   "$BASE/assetto" \
   "$BASE/servers" \
   "$BASE/shared_store.json" \
-  "$BASE/content"
+  "$BASE/content" \
+  "$BASE/setups" \
+  "$BASE/manager"
 
 # Start
 exec su -s /bin/sh -c "$BASE/assetto-multiserver-manager" assetto
